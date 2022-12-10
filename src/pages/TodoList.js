@@ -61,13 +61,11 @@ function TodoList() {
   const id = nextId();
   const [todo, setTodo] = useState({ id: 0, title: "", content: "" });
   const [todos, setTodos] = useState([]);
-  const [todosDB, setTodosDB] = useState({});
   const getTodos = async () => {
     try {
       const { data } = await axios.get(
         `http://localhost:3001/todos?date=1670484601`
       );
-      setTodosDB(data[0]);
       setTodos(data[0].items);
     } catch (e) {
       alert(e);
@@ -81,14 +79,12 @@ function TodoList() {
 
   const addTodo = async () => {
     try {
-      console.log(todosDB);
-      // TODO: fix add Todo
-      const result = await axios.put(`http://localhost:3001/todos`, todo);
-      console.log(result);
+      await axios.patch(`http://localhost:3001/todos/1`, {
+        items: [...todos, todo],
+      });
+      setTodos([...todos, todo]);
     } catch (e) {
       alert(e);
-    } finally {
-      getTodos();
     }
   };
 
