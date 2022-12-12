@@ -1,39 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import nextId from "react-id-generator";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
+import { __getTodos } from "../redux/modules/TodosSlice";
+import Progressbar from "../components/Progressbar";
+import TodoInput from "../components/TodoInput";
+import Item from "../components/Item";
+import { useParams } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;
 `;
 
-const InputWrapper = styled.div`
-  padding: 20px;
-  background-color: #ccc;
+const Header = styled.h1`
+  width: 100%;
+  font-weight: 900;
+`;
+
+const Logo = styled.span`
+  margin-left: 20px;
+  color: cornflowerblue;
+`;
+
+const InfoBox = styled.div`
+  width: 100%;
+  height: 50vh;
+  line-height: 50vh;
+  text-align: center;
+  color: #ccc;
+`;
+
+const TodoListBox = styled.div`
+  width: 100%;
+  padding: 20px 0;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-`;
-
-const Label = styled.span`
-  margin-right: 10px;
-`;
-
-const Input = styled.input`
-  width: 300px;
-  height: 30px;
-  margin-right: 10px;
-  text-indent: 10px;
-`;
-
-const Btn = styled.button`
-  width: 300px;
-  height: 30px;
-  background-color: cornflowerblue;
-`;
-
-const TodoListWrapper = styled.div`
+  gap: 1%;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   ::after {
     display: block;
     content: "";
@@ -41,98 +47,56 @@ const TodoListWrapper = styled.div`
   }
 `;
 
-const TodoListBox = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1%;
-`;
-
-const TodoBox = styled.div`
-  width: 16%;
-  padding: 1%;
-  float: left;
-  border: 3px solid cornflowerblue;
-  border-radius: 20px;
-`;
-
 function TodoList() {
-  const id = nextId();
-  const [todo, setTodo] = useState({ id: 0, title: "", content: "" });
-  const [todos, setTodos] = useState([]);
-  const getTodos = async () => {
-    try {
-      const { data } = await axios.get(
-        `http://localhost:3001/todos?date=1670484601`
-      );
-      setTodos(data[0].items);
-    } catch (e) {
-      alert(e);
-    }
+  const { id } = useParams();
+  const todos = useSelector((store) => store.todos.todos);
+  const todosID = useSelector((store) => store.todos.todosID);
+  const dispatch = useDispatch();
+  const scrollRef = useRef(null);
+
+  const setScroll = () => {
+    scrollRef.current.scrollLeft += 300 * (todos.length - 1);
   };
 
   useEffect(() => {
-    getTodos();
-    setTodo({ ...todo, id });
-  }, []);
+    setScroll();
+  }, [todos, scrollRef]);
 
-  const addTodo = async () => {
-    try {
-      await axios.patch(`http://localhost:3001/todos/1`, {
-        items: [...todos, todo],
-      });
-      setTodos([...todos, todo]);
-    } catch (e) {
-      alert(e);
-    }
-  };
+  useEffect(() => {
+    dispatch(__getTodos(id));
+  }, [dispatch, id]);
 
-  const handleChangeTitle = ({ target: { value } }) => {
-    setTodo({ ...todo, title: value });
-  };
-
-  const handleChangeContent = ({ target: { value } }) => {
-    setTodo({ ...todo, content: value });
-  };
-
+  const date = new Date(todosID);
   return (
     <Wrapper>
-      <InputWrapper>
-        <div>
-          <Label>제목</Label>
-          <Input
-            value={todo.title}
-            onChange={handleChangeTitle}
-            type="text"
-            placeholder="내용을 입력해주세요."
-          />
-          <Label>내용</Label>
-          <Input
-            value={todo.content}
-            onChange={handleChangeContent}
-            type="text"
-            placeholder="내용을 입력해주세요."
-          />
-        </div>
-        <Btn onClick={addTodo}>추가하기</Btn>
-      </InputWrapper>
-      <TodoListWrapper>
+      <Header>
+        {`${date.getFullYear()}년 ${date.getMonth()}월 ${date.getDay()}일`}
+        <Logo>TODO 🎯</Logo>
+      </Header>
+      <Progressbar></Progressbar>
+      <TodoInput></TodoInput>
+      {/* {todos.length === 0 ? (
+        <InfoBox>새로운 할일을 추가해보세요!</InfoBox>
+      ) : ( */}
+      <>
         <h1>Working</h1>
-        <TodoListBox>
-          {todos.map((v) => (
-            <TodoBox key={v.id}>{v.content}</TodoBox>
-          ))}
+        <TodoListBox ref={scrollRef}>
+          {todos.filter((v) => v.isDone === false).length !== 0
+            ? todos
+                .filter((v) => v.isDone === false)
+                .map((v) => <Item key={v.id} todo={v} />)
+            : "추가된 할일이 없습니다."}
         </TodoListBox>
-      </TodoListWrapper>
-      <TodoListWrapper>
         <h1>Done</h1>
         <TodoListBox>
-          {todos.map((v) => (
-            <TodoBox key={v.id}>{v.content}</TodoBox>
-          ))}
+          {todos.filter((v) => v.isDone === true).length !== 0
+            ? todos
+                .filter((v) => v.isDone === true)
+                .map((v) => <Item key={v.id} todo={v} />)
+            : "완료된 일이 없습니다."}
         </TodoListBox>
-      </TodoListWrapper>
+      </>
+      {/* )} */}
     </Wrapper>
   );
 }
