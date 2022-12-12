@@ -6,12 +6,8 @@
         {
           "id": 1670659778436,
           "title": "청소",
-          "content": "빨래"
-        },
-        {
-          "id": 1670674614349,
-          "title": "식사",
-          "content": "마라탕"
+          "content": "빨래",
+          "isDone": false
         }
       ]
     }
