@@ -4,6 +4,7 @@ import axios from "axios";
 const initialState = {
   todos: [],
   todosID: 0,
+  isLoading: false,
 };
 
 export const __getTodos = createAsyncThunk(
@@ -13,7 +14,7 @@ export const __getTodos = createAsyncThunk(
       const { data } = await axios.get(
         `http://localhost:3001/todos/${payload}`
       );
-      thunkAPI.dispatch(getTodos(data));
+      return thunkAPI.fulfillWithValue(data);
     } catch (e) {
       alert(`getTodoError: ${e}`);
     }
@@ -27,7 +28,7 @@ export const __addTodo = createAsyncThunk(
       await axios.patch(`http://localhost:3001/todos/${payload.todosID}`, {
         items: [...payload.todos, payload.todo],
       });
-      thunkAPI.dispatch(addTodo(payload.todo));
+      return thunkAPI.fulfillWithValue(payload.todo);
     } catch (e) {
       alert(`addTodoError: ${e}`);
     }
@@ -45,7 +46,7 @@ export const __updateTodo = createAsyncThunk(
       await axios.patch(`http://localhost:3001/todos/${payload.todosID}`, {
         items: updatedTodos,
       });
-      thunkAPI.dispatch(updateTodo(updatedTodos));
+      return thunkAPI.fulfillWithValue(updatedTodos);
     } catch (e) {
       alert(`updateTodoError: ${e}`);
     }
@@ -60,7 +61,7 @@ export const __deleteTodo = createAsyncThunk(
       await axios.patch(`http://localhost:3001/todos/${payload.todosID}`, {
         items: updatedTodos,
       });
-      thunkAPI.dispatch(updateTodo(updatedTodos));
+      return thunkAPI.fulfillWithValue(updatedTodos);
     } catch (e) {
       alert(`deleteTodoError: ${e}`);
     }
@@ -70,22 +71,37 @@ export const __deleteTodo = createAsyncThunk(
 const todosSlice = createSlice({
   name: "todos",
   initialState,
-  reducers: {
-    getTodos: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(__getTodos.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(__getTodos.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.todosID = action.payload.id;
       state.todos = action.payload.items;
-    },
-    addTodo: (state, action) => {
+    });
+    builder.addCase(__addTodo.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(__addTodo.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.todos = [...state.todos, action.payload];
-    },
-    updateTodo: (state, action) => {
+    });
+    builder.addCase(__updateTodo.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(__updateTodo.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.todos = action.payload;
-    },
-    deleteTodo: (state, action) => {
+    });
+    builder.addCase(__deleteTodo.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(__deleteTodo.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.todos = action.payload;
-    },
+    });
   },
 });
 
-export const { getTodos, addTodo, updateTodo, deleteTodo } = todosSlice.actions;
 export default todosSlice.reducer;
