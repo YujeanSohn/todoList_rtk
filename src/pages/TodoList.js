@@ -78,7 +78,9 @@ function TodoList() {
       </Header>
       <Progressbar></Progressbar>
       <TodoInput></TodoInput>
-      {todos.length === 0 ? (
+      {isLoading ? (
+        <InfoBox>데이터를 불러오는 중입니다.</InfoBox>
+      ) : todos.length === 0 ? (
         <InfoBox>새로운 할일을 추가해보세요!</InfoBox>
       ) : (
         <>
