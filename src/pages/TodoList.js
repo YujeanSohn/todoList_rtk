@@ -49,18 +49,21 @@ const TodoListBox = styled.div`
 
 function TodoList() {
   const { id } = useParams();
+  const isLoading = useSelector((store) => store.todos.isLoading);
   const todos = useSelector((store) => store.todos.todos);
   const todosID = useSelector((store) => store.todos.todosID);
   const dispatch = useDispatch();
   const scrollRef = useRef(null);
 
   const setScroll = () => {
-    scrollRef.current.scrollLeft += 300 * (todos.length - 1);
+    if (scrollRef.current !== null) {
+      scrollRef.current.scrollLeft += 300 * (todos.length - 1);
+    }
   };
 
   useEffect(() => {
     setScroll();
-  }, [todos, scrollRef]);
+  }, [todos]);
 
   useEffect(() => {
     dispatch(__getTodos(id));
@@ -75,28 +78,28 @@ function TodoList() {
       </Header>
       <Progressbar></Progressbar>
       <TodoInput></TodoInput>
-      {/* {todos.length === 0 ? (
+      {todos.length === 0 ? (
         <InfoBox>새로운 할일을 추가해보세요!</InfoBox>
-      ) : ( */}
-      <>
-        <h1>Working</h1>
-        <TodoListBox ref={scrollRef}>
-          {todos.filter((v) => v.isDone === false).length !== 0
-            ? todos
-                .filter((v) => v.isDone === false)
-                .map((v) => <Item key={v.id} todo={v} />)
-            : "추가된 할일이 없습니다."}
-        </TodoListBox>
-        <h1>Done</h1>
-        <TodoListBox>
-          {todos.filter((v) => v.isDone === true).length !== 0
-            ? todos
-                .filter((v) => v.isDone === true)
-                .map((v) => <Item key={v.id} todo={v} />)
-            : "완료된 일이 없습니다."}
-        </TodoListBox>
-      </>
-      {/* )} */}
+      ) : (
+        <>
+          <h1>Working</h1>
+          <TodoListBox ref={scrollRef}>
+            {todos.filter((v) => v.isDone === false).length !== 0
+              ? todos
+                  .filter((v) => v.isDone === false)
+                  .map((v) => <Item key={v.id} todo={v} />)
+              : "추가된 할일이 없습니다."}
+          </TodoListBox>
+          <h1>Done</h1>
+          <TodoListBox>
+            {todos.filter((v) => v.isDone === true).length !== 0
+              ? todos
+                  .filter((v) => v.isDone === true)
+                  .map((v) => <Item key={v.id} todo={v} />)
+              : "완료된 일이 없습니다."}
+          </TodoListBox>
+        </>
+      )}
     </Wrapper>
   );
 }
