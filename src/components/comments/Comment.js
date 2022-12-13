@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
 import {__editComment, __deleteComment} from "../../redux/modules/CommentsSlice";
+
+import styled from "styled-components";
 
 const CommentWrapper = styled.form`
   width: 95%;

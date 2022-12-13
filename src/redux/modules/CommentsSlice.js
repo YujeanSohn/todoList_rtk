@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk, isPending, isRejected} from "@reduxjs/toolkit";
+import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const __fetchComments = createAsyncThunk(
@@ -66,34 +66,6 @@ const initialState = {
 const CommentsSlice = createSlice({
     name: "comments",
     initialState,
-    // extraReducers: (initialState, builder) =>
-    //     builder
-    //         .addCase(__fetchComments.fulfilled, (state, action) => {
-    //             state.isloading = false;
-    //             state.comments = action.payload;
-    //         })
-    //         .addCase(__addComment.fulfilled, (state, action) => {
-    //             state.isloading = false;
-    //             state.comments = [...state.comments, action.payload];
-    //         })
-    //         .addCase(__editComment.fulfilled, (state, action) => {
-    //             state.isloading = false;
-    //             state.comments = state.comments.map((comment) => ({
-    //                 ...comment,
-    //                 content: comment.id === action.payload.id ? action.payload.newContent : comment.content,
-    //             }))
-    //         })
-    //         .addCase(__deleteComment.fulfilled, (state, action) => {
-    //             state.isloading = false;
-    //             state.comments = state.comments.filter((comment) => comment.id !== action.payload);
-    //         })
-    //         .addMatcher(isPending, (state) => {
-    //             state.isLoading = true;
-    //         })
-    //         .addMatcher(isRejected, (state, action) => {
-    //             state.isLoading = false;
-    //             state.error = action.payload;
-    //         })
     extraReducers: {
         [__fetchComments.pending]: (state) => {
             state.isLoading = true;
@@ -144,11 +116,5 @@ const CommentsSlice = createSlice({
         },
     }
 });
-
-
-
-
-
-
 
 export default CommentsSlice.reducer;

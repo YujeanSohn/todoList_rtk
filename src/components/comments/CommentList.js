@@ -1,8 +1,9 @@
 import React, {useLayoutEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import styled from "styled-components";
-import Comments from "./Comment";
 import {__fetchComments, __addComment} from "../../redux/modules/CommentsSlice";
+import Comments from "./Comment";
+
+import styled from "styled-components";
 
 const ListWrapper = styled.div`
   border: 3px solid mediumpurple;
