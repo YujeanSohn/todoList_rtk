@@ -6,7 +6,7 @@ import Comments from "./Comment";
 import styled from "styled-components";
 
 const ListWrapper = styled.div`
-  border: 3px solid mediumpurple;
+  border: 3px solid cornflowerblue;
   border-radius: 10px;
   padding: 20px;
 `;
@@ -22,7 +22,7 @@ const InputWrapper = styled.form`
 const Input = styled.input`
   width: 97%;
   height: 30px;
-  border: 2px solid mediumpurple;
+  border: 2px solid cornflowerblue;
   border-radius: 10px;
   margin-right: 10px;
   text-indent: 10px;
@@ -31,7 +31,7 @@ const Input = styled.input`
 const Button = styled.button`
   cursor: pointer;
   background-color: transparent;
-  border: 2px solid mediumpurple;
+  border: 2px solid cornflowerblue;
   border-radius: 50%;
   padding: 5px;
 `;
@@ -50,11 +50,21 @@ const CommentList = ({date}) => {
     };
 
     if (isLoading) {
-        return <div>로딩 중....</div>;
+        return (
+            <ListWrapper>
+                <h2>Comments</h2>
+                <div>로딩 중....</div>
+            </ListWrapper>
+        )
     }
 
     if (error) {
-        return <div>{error.message}</div>;
+        return (
+            <ListWrapper>
+                <h2>Comments</h2>
+                <h3>ERROR: {error.message}</h3>
+            </ListWrapper>
+        )
     }
 
     return (
