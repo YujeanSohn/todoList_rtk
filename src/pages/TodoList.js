@@ -8,6 +8,8 @@ import TodoInput from "../components/TodoInput";
 import Item from "../components/Item";
 import { useParams } from "react-router-dom";
 
+import CommentList from "../components/comments/CommentList"
+
 const Wrapper = styled.div`
   width: 100%;
 `;
@@ -112,6 +114,7 @@ function TodoList() {
           </TodoListBox>
         </>
       )}
+      <CommentList date={id}/>
     </Wrapper>
   );
 }

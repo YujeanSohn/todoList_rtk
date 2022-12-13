@@ -1,36 +1,37 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import {useDispatch, useSelector} from "react-redux";
+import {__editComment, __deleteComment} from "../../redux/modules/CommentsSlice";
 
-const CommentWrapper = styled.div`
-  margin: 10px;
-  padding: 20px;
-  border: 3px solid cornflowerblue;
-  border-radius: 20px;
+const CommentWrapper = styled.form`
+  width: 95%;
+  margin: 10px 0px 0px 0px;
+  padding: 10px;
+  border: 1px solid mediumpurple;
+  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
 const Input = styled.input`
-  width: 50%;
+  width: 93%;
   height: 30px;
   margin-right: 10px;
   text-indent: 10px;
-`;
-
-const ButtonWrapper = styled.div`
-  width: 440px;
+  border: none;
 `;
 
 const Button = styled.button`
-  width: 200px;
-  height: 30px;
-  margin: 10px;
-  background-color: cornflowerblue;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
 `;
 
 const Comments = ({comment: {id, content}}) => {
+    const dispatch = useDispatch();
+    const {isLoading, error} = useSelector((state) => state.comments);
     const [toggle, setToggle] = useState(false);
     const [newContent, setNewContent] = useState(content);
 
@@ -42,34 +43,33 @@ const Comments = ({comment: {id, content}}) => {
         setNewContent(e.target.value);
     };
 
-    const editComment = (id, newContent) => {
-        axios.patch(`http://localhost:3001/comments/${id}`, {content: newContent});
-        handleToggle();
-    };
+    if (isLoading) {
+        return <div>로딩 중....</div>;
+    }
 
-    const deleteComment = (id) => {
-        axios.delete(`http://localhost:3001/comments/${id}`);
-        setToggle("deleted");
-    };
-
-    if (toggle === "deleted") return null;
+    if (error) {
+        return <div>{error.message}</div>;
+    }
 
     if (!toggle)
         return (
             <CommentWrapper><span>{newContent}</span>
-                <ButtonWrapper>
-                    <Button onClick={handleToggle}>수정하기</Button>
-                    <Button onClick={() => deleteComment(id)}>삭제하기</Button>
-                </ButtonWrapper>
+                <div>
+                    <Button onClick={handleToggle}>✏</Button>
+                    <Button onClick={() => dispatch(__deleteComment(id))}>🗑️</Button>
+                </div>
             </CommentWrapper>
         )
     else return (
-        <CommentWrapper>
-            <Input type="text" placeholder={newContent} onChange={handleChangeContent}/>
-            <ButtonWrapper>
-                <Button onClick={() => editComment(id, newContent)}>수정완료</Button>
-                <Button onClick={handleToggle}>취소하기</Button>
-            </ButtonWrapper>
+        <CommentWrapper onSubmit={(e) => {
+            e.preventDefault();
+            dispatch(__editComment({id, newContent}));
+        }}>
+            <Input type="text" placeholder={newContent} onChange={handleChangeContent} required/>
+            <div>
+                <Button>✔</Button>
+                <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle();}}>❌</Button>
+            </div>
         </CommentWrapper>
     );
 };
