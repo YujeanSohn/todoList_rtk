@@ -28,6 +28,7 @@ const BtnWrapper = styled.div`
 const Btn = styled.button`
   width: 40%;
   height: 30px;
+  display: ${(props) => (props.show ? "block" : "none")};
   background-color: ${(props) => props.bgColor};
   border: none;
   border-radius: 10px;
@@ -47,6 +48,7 @@ const DeleteBtn = styled.span`
   width: 30px;
   height: 30px;
   line-height: 30px;
+  display: ${(props) => (props.show ? "block" : "none")};
   text-align: center;
   background-color: red;
   color: white;
@@ -56,7 +58,7 @@ const DeleteBtn = styled.span`
   }
 `;
 
-function Item({ todo }) {
+function Item({ todo, isToday }) {
   const todos = useSelector((store) => store.todos.todos);
   const todosID = useSelector((store) => store.todos.todosID);
   const dispatch = useDispatch();
@@ -114,7 +116,9 @@ function Item({ todo }) {
   return (
     <ItemBox>
       <DeleteBtnWrapper>
-        <DeleteBtn onClick={handleDeleteTodo}>✖</DeleteBtn>
+        <DeleteBtn onClick={handleDeleteTodo} show={isToday}>
+          ✖
+        </DeleteBtn>
       </DeleteBtnWrapper>
       {isModify ? (
         <>
@@ -140,7 +144,7 @@ function Item({ todo }) {
         </>
       )}
       <BtnWrapper>
-        <Btn onClick={handleUpdateTodoContent} bgColor="gray">
+        <Btn onClick={handleUpdateTodoContent} show={isToday} bgColor="gray">
           {isModify
             ? title.length === 0 || content.length === 0
               ? "취소"
@@ -149,6 +153,7 @@ function Item({ todo }) {
         </Btn>
         <Btn
           onClick={handleUpdateTodoState}
+          show={isToday}
           bgColor={todo.isDone ? "tomato" : "cornflowerBlue"}
         >
           {todo.isDone ? "취소" : "완료"}
