@@ -44,7 +44,6 @@ const DateSt = styled.div`
 `;
 
 const CommentCount = styled.div`
-  /* position: absolute; */
   float: right;
   font-size: 20px;
   font-weight: 500;
@@ -75,7 +74,6 @@ function Home() {
 
   const [comments, setComments] = useState([]);
   const [allTodos, setAllTodos] = useState([]);
-  // const [render, setRender] = useState(1);
   const [todos, setTodos] = useState({
     id: 0,
     day: 0,
@@ -144,7 +142,7 @@ function Home() {
       <CardListWrapper>
         {allTodos.map((todos) => {
           let today = new Date(todos.id);
-          let year = today.getFullYear().toString();
+          let year = today.getFullYear();
           let month = today.getMonth() + 1;
           let day = today.getDate();
 
