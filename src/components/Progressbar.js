@@ -8,8 +8,7 @@ const Wrapper = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  width: 97%;
-  padding-left: 3%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: start;
