@@ -50,7 +50,6 @@ export const __deleteComment = createAsyncThunk(
     },
 );
 
-
 const initialState = {
     comments: [
         {
