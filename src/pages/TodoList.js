@@ -112,9 +112,9 @@ function TodoList() {
                   .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
               : "완료된 일이 없습니다."}
           </TodoListBox>
+          <CommentList date={id}/>
         </>
       )}
-      <CommentList date={id}/>
     </Wrapper>
   );
 }
