@@ -75,7 +75,7 @@ function TodoList() {
     return (
       today.getFullYear() === writtenDay.getFullYear() &&
       today.getMonth() === writtenDay.getMonth() &&
-      today.getDay() === writtenDay.getDay()
+      today.getDate() === writtenDay.getDate()
     );
   };
 
@@ -83,7 +83,7 @@ function TodoList() {
   return (
     <Wrapper>
       <Header>
-        {`${date.getFullYear()}년 ${date.getMonth()}월 ${date.getDay()}일`}
+        {`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`}
         <Logo>TODO 🎯</Logo>
       </Header>
       <Progressbar></Progressbar>
