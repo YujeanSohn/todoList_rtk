@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { __addTodo } from "../redux/modules/TodosSlice";
 
-const InputWrapper = styled.div`
+const Wrapper = styled.div`
   padding: 20px;
   background-color: #ccc;
   display: flex;
@@ -14,6 +14,10 @@ const InputWrapper = styled.div`
 
 const Label = styled.span`
   margin-right: 10px;
+`;
+
+const InputWrapper = styled.div`
+  float: left;
 `;
 
 const Input = styled.input`
@@ -42,10 +46,20 @@ function TodoInput({ isToday }) {
   const ref = useRef();
 
   const handleChangeTitle = ({ target: { value } }) => {
+    if (value.length > 15) {
+      alert("제목은 15자 이하로 작성해주세요");
+      return;
+    }
+
     setTodo({ ...todo, title: value });
   };
 
   const handleChangeContent = ({ target: { value } }) => {
+    if (value.length > 20) {
+      alert("내용은 20자 이하로 작성해주세요");
+      return;
+    }
+
     setTodo({ ...todo, content: value });
   };
 
@@ -71,28 +85,37 @@ function TodoInput({ isToday }) {
   };
 
   return (
-    <InputWrapper>
+    <Wrapper>
       <div>
-        <Label>제목</Label>
-        <Input
-          ref={ref}
-          value={todo.title}
-          onChange={handleChangeTitle}
-          type="text"
-          placeholder="내용을 입력해주세요."
-          disabled={!isToday}
-        />
-        <Label>내용</Label>
-        <Input
-          value={todo.content}
-          onChange={handleChangeContent}
-          type="text"
-          placeholder="내용을 입력해주세요."
-          disabled={!isToday}
-        />
+        <InputWrapper>
+          <Label>제목</Label>
+          <Input
+            ref={ref}
+            value={todo.title}
+            onChange={handleChangeTitle}
+            type="text"
+            placeholder="내용을 입력해주세요."
+            disabled={!isToday}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <Label>내용</Label>
+          <Input
+            value={todo.content}
+            onChange={handleChangeContent}
+            type="text"
+            placeholder="내용을 입력해주세요."
+            disabled={!isToday}
+          />
+        </InputWrapper>
       </div>
-      <Btn onClick={addTodo}>추가하기</Btn>
-    </InputWrapper>
+      <Btn
+        onClick={addTodo}
+        disabled={todo.title.length === 0 || todo.content.length === 0}
+      >
+        추가하기
+      </Btn>
+    </Wrapper>
   );
 }
 
