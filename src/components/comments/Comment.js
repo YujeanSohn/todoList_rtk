@@ -30,38 +30,56 @@ const Button = styled.button`
 `;
 
 const Comments = ({comment: {id, content}}) => {
-    const dispatch = useDispatch();
-    const [toggle, setToggle] = useState(false);
-    const [newContent, setNewContent] = useState(content);
+  const dispatch = useDispatch();
+  const [toggle, setToggle] = useState(false);
+  const [newContent, setNewContent] = useState(content);
+  //수정하기 할 때 이전 state를 placeholder가 아닌 value에 넣어주세요
+  //state를 useState초기값으로 설정해 놓으면 더 편리합니다.
+  const handleToggle = () => {
+    setToggle((prev) => !prev);
+  };
 
-    const handleToggle = () => {
-        setToggle((prev) => !prev);
-    };
+  const handleChangeContent = (e) => {
+    setNewContent(e.target.value);
+  };
 
-    const handleChangeContent = (e) => {
-        setNewContent(e.target.value);
-    };
-
-    if (!toggle)
-        return (
-            <CommentWrapper><span>{newContent}</span>
-                <div>
-                    <Button onClick={handleToggle}>✏</Button>
-                    <Button onClick={() => dispatch(__deleteComment(id))}>🗑️</Button>
-                </div>
-            </CommentWrapper>
-        )
-    else return (
-        <CommentWrapper onSubmit={(e) => {
-            e.preventDefault();
-            dispatch(__editComment({id, newContent}));
-        }}>
-            <Input type="text" placeholder={newContent} onChange={handleChangeContent} required/>
-            <div>
-                <Button>✔</Button>
-                <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle();}}>❌</Button>
-            </div>
-        </CommentWrapper>
+  if (!toggle)
+    return (
+      <CommentWrapper>
+        <span>{newContent}</span>
+        <div>
+          <Button onClick={handleToggle}>✏</Button>
+          <Button onClick={() => dispatch(__deleteComment(id))}>🗑️</Button>
+        </div>
+      </CommentWrapper>
+    );
+  else
+    return (
+      <CommentWrapper
+        onSubmit={(e) => {
+          e.preventDefault();
+          dispatch(__editComment({ id, newContent }));
+        }}
+      >
+        <Input
+          type="text"
+          placeholder={newContent}
+          onChange={handleChangeContent}
+          required
+        />
+        <div>
+          <Button>✔</Button>
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              handleToggle();
+            }}
+          >
+            ❌
+          </Button>
+        </div>
+      </CommentWrapper>
     );
 };
 

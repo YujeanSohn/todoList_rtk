@@ -58,13 +58,16 @@ function TodoList() {
   const scrollRef = useRef(null);
 
   const setScroll = () => {
+    // 조건문을 if(!scrollRef?.current) return으로 써주셔도 돼요
+    // 수정할때 스크롤 값을 조정하려면 조건을 달아줘야 하는데 item component에 있는isModify
+    // 같은 걸 조건문에 이용하면 좋을 것 같아요 상위컴포넌트로 이동시켜서 이용할 수 있을 것 같습니다.
     if (scrollRef.current !== null) {
       scrollRef.current.scrollLeft += 300 * (todos.length - 1);
     }
   };
 
   useEffect(() => {
-    setScroll();
+    setScroll(); //setScroll함수 자체를 useEffect 안에 넣어주면 missing dependency가 안뜰거에요
   }, [todos]);
 
   useEffect(() => {
@@ -90,7 +93,7 @@ function TodoList() {
       </Header>
       <Progressbar></Progressbar>
       <TodoInput isToday={isToday()}></TodoInput>
-      {isLoading ? (
+      {isLoading ? ( //&&연산자를 사용하는건 어떨까요?
         <InfoBox>데이터를 불러오는 중입니다.</InfoBox>
       ) : todos.length === 0 ? (
         <InfoBox>새로운 할일을 추가해보세요!</InfoBox>
@@ -98,7 +101,7 @@ function TodoList() {
         <>
           <h1>Working</h1>
           <TodoListBox ref={scrollRef}>
-            {todos.filter((v) => v.isDone === false).length !== 0
+            {todos.filter((v) => v.isDone === false).length !== 0 //!v.isDone으로 써주세요
               ? todos
                   .filter((v) => v.isDone === false)
                   .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
@@ -112,7 +115,7 @@ function TodoList() {
                   .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
               : "완료된 일이 없습니다."}
           </TodoListBox>
-          <CommentList date={id}/>
+          <CommentList date={id} />
         </>
       )}
     </Wrapper>
