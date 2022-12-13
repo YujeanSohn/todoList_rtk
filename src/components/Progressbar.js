@@ -61,7 +61,7 @@ const StateIcon = styled.span`
 `;
 
 function Progressbar() {
-  const todos = useSelector((store) => store.todos.todos);
+  const todos = useSelector((store) => store.todos.todos); //component자체에서 data를 fetch해오는게 좋지 않을까요?
   const donesCount = todos.filter((v) => v.isDone === true).length;
   const donesPercentage = (donesCount / todos.length) * 100;
   return (

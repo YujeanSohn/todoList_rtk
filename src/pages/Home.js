@@ -81,7 +81,7 @@ function Home() {
   });
 
   useEffect(() => {
-    setTodos({ ...todos, id });
+    setTodos({ ...todos, id }); //setTodos는 왜해주고 있는거에요??
     getAllTodos();
     getComments();
   }, []);
@@ -147,6 +147,7 @@ function Home() {
           let day = today.getDate();
 
           let commentcount = comments.filter(
+            //let을 사용한 이유는 무엇인가요?
             (comment) => todos.id === comment.todosId
           ).length;
 

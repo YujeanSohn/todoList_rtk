@@ -63,8 +63,8 @@ function Item({ todo, isToday }) {
   const todosID = useSelector((store) => store.todos.todosID);
   const dispatch = useDispatch();
   const [isModify, setIsModify] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState(""); //title 초기값 설정해서 value에 넣어주세요
+  const [content, setContent] = useState(""); //content도 동일..이거 바꾸고 수정하기 버튼 조건문도 변경하셔야 될거에요.
   const handleUpdateTodoContent = async () => {
     try {
       if (!isModify) {
