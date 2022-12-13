@@ -29,7 +29,7 @@ const Btn = styled.button`
   background-color: cornflowerblue;
 `;
 
-function TodoInput() {
+function TodoInput({ isToday }) {
   const id = Date.now();
   const todos = useSelector((store) => store.todos.todos);
   const todosID = useSelector((store) => store.todos.todosID);
@@ -80,6 +80,7 @@ function TodoInput() {
           onChange={handleChangeTitle}
           type="text"
           placeholder="내용을 입력해주세요."
+          disabled={!isToday}
         />
         <Label>내용</Label>
         <Input
@@ -87,6 +88,7 @@ function TodoInput() {
           onChange={handleChangeContent}
           type="text"
           placeholder="내용을 입력해주세요."
+          disabled={!isToday}
         />
       </div>
       <Btn onClick={addTodo}>추가하기</Btn>

@@ -69,6 +69,16 @@ function TodoList() {
     dispatch(__getTodos(id));
   }, [dispatch, id]);
 
+  const isToday = () => {
+    const today = new Date(Date.now());
+    const writtenDay = new Date(todosID);
+    return (
+      today.getFullYear() === writtenDay.getFullYear() &&
+      today.getMonth() === writtenDay.getMonth() &&
+      today.getDay() === writtenDay.getDay()
+    );
+  };
+
   const date = new Date(todosID);
   return (
     <Wrapper>
@@ -77,7 +87,7 @@ function TodoList() {
         <Logo>TODO 🎯</Logo>
       </Header>
       <Progressbar></Progressbar>
-      <TodoInput></TodoInput>
+      <TodoInput isToday={isToday()}></TodoInput>
       {isLoading ? (
         <InfoBox>데이터를 불러오는 중입니다.</InfoBox>
       ) : todos.length === 0 ? (
@@ -89,7 +99,7 @@ function TodoList() {
             {todos.filter((v) => v.isDone === false).length !== 0
               ? todos
                   .filter((v) => v.isDone === false)
-                  .map((v) => <Item key={v.id} todo={v} />)
+                  .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
               : "추가된 할일이 없습니다."}
           </TodoListBox>
           <h1>Done</h1>
@@ -97,7 +107,7 @@ function TodoList() {
             {todos.filter((v) => v.isDone === true).length !== 0
               ? todos
                   .filter((v) => v.isDone === true)
-                  .map((v) => <Item key={v.id} todo={v} />)
+                  .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
               : "완료된 일이 없습니다."}
           </TodoListBox>
         </>
