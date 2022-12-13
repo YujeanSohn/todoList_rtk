@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -60,8 +59,7 @@ const StateIcon = styled.span`
   transition: font-size 1s;
 `;
 
-function Progressbar() {
-  const todos = useSelector((store) => store.todos.todos);
+function Progressbar({ todos }) {
   const donesCount = todos.filter((v) => v.isDone === true).length;
   const donesPercentage = (donesCount / todos.length) * 100;
   return (

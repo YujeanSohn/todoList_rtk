@@ -6,9 +6,8 @@ import { __getTodos } from "../redux/modules/TodosSlice";
 import Progressbar from "../components/Progressbar";
 import TodoInput from "../components/TodoInput";
 import Item from "../components/Item";
+import CommentList from "../components/comments/CommentList";
 import { useParams } from "react-router-dom";
-
-import CommentList from "../components/comments/CommentList"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -88,7 +87,7 @@ function TodoList() {
         {`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`}
         <Logo>TODO 🎯</Logo>
       </Header>
-      <Progressbar></Progressbar>
+      <Progressbar todos={todos}></Progressbar>
       <TodoInput isToday={isToday()}></TodoInput>
       {isLoading ? (
         <InfoBox>데이터를 불러오는 중입니다.</InfoBox>
@@ -112,7 +111,7 @@ function TodoList() {
                   .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
               : "완료된 일이 없습니다."}
           </TodoListBox>
-          <CommentList date={id}/>
+          <CommentList date={id} />
         </>
       )}
     </Wrapper>
