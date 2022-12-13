@@ -8,6 +8,8 @@ import TodoInput from "../components/TodoInput";
 import Item from "../components/Item";
 import { useParams } from "react-router-dom";
 
+import CommentList from "../components/comments/CommentList"
+
 const Wrapper = styled.div`
   width: 100%;
 `;
@@ -110,6 +112,7 @@ function TodoList() {
                   .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
               : "완료된 일이 없습니다."}
           </TodoListBox>
+          <CommentList date={id}/>
         </>
       )}
     </Wrapper>
