@@ -3,8 +3,6 @@ import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Progressbar from "../components/Progressbar";
-import { __getTodos } from "../redux/modules/TodosSlice";
-import { useSelector } from "react-redux";
 
 const Wrapper = styled.div`
   padding: 20px;
@@ -75,7 +73,7 @@ function Home() {
   const [comments, setComments] = useState([]);
   const [allTodos, setAllTodos] = useState([]);
   const [todos, setTodos] = useState({
-    id: id,
+    id,
     items: [],
   });
 
