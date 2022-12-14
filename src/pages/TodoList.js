@@ -91,7 +91,7 @@ function TodoList() {
         {`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`}
         <Logo>TODO 🎯</Logo>
       </Header>
-      <Progressbar todos={todos}></Progressbar>
+      <Progressbar todos={todos} isSmallSize={false}></Progressbar>
       <TodoInput isToday={isToday()}></TodoInput>
       {isLoading ? (
         <InfoBox>데이터를 불러오는 중입니다.</InfoBox>

@@ -154,7 +154,7 @@ function Home() {
               key={todos.id}
             >
               <DateSt>{year + "년" + month + "월" + day + "일"}</DateSt>
-              <Progressbar todos={todos.items} />
+              <Progressbar todos={todos.items} isSmallSize={true} />
               <CommentCount>💬{commentcount}</CommentCount>
             </CardWrapper>
           );

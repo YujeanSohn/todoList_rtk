@@ -38,7 +38,7 @@ const ProgressBar = styled.div`
 
 const ProgressBarIcon = styled.span`
   position: absolute;
-  right: -15px;
+  right: ${(props) => props.position};
   top: -15px;
   font-size: 40px;
   transform: rotateY(180deg);
@@ -55,11 +55,12 @@ const StateWrapper = styled.div`
 `;
 
 const StateIcon = styled.span`
+  display: ${(props) => props.display};
   font-size: ${(props) => props.fontSize};
   transition: font-size 1s;
 `;
 
-function Progressbar({ todos }) {
+function Progressbar({ todos, isSmallSize }) {
   const donesCount = todos?.filter((v) => v.isDone === true).length;
   const donesPercentage = (donesCount / todos.length) * 100;
   return (
@@ -68,11 +69,16 @@ function Progressbar({ todos }) {
       <ContentWrapper>
         <ProgressBarWrapper>
           <ProgressBar width={`${donesPercentage}%`}>
-            <ProgressBarIcon>🏃</ProgressBarIcon>
+            <ProgressBarIcon
+              position={donesPercentage === 0 ? "-40px" : "-15px"}
+            >
+              🏃
+            </ProgressBarIcon>
           </ProgressBar>
         </ProgressBarWrapper>
         <StateWrapper>
           <StateIcon
+            display={isSmallSize ? "none" : ""}
             fontSize={
               donesPercentage > 50
                 ? donesPercentage === 100
