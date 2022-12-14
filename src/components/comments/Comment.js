@@ -63,12 +63,12 @@ const Comments = ({comment: {id, content, editHistory}}) => {
             </CommentWrapper>
         )
     else return (
-        <CommentWrapper>
+        <CommentWrapper onSubmit={(e) => {e.preventDefault();
+                    dispatch(__editComment({id, newContent, editHistory: Date.now()}));
+                    handleToggle();}}>
             <Input type="text" value={newContent} onChange={handleChangeContent} required/>
             <div>
-                <Button onClick={(e) => {e.preventDefault();
-                    dispatch(__editComment({id, newContent, editHistory: Date.now()}));
-                    handleToggle();}}>✔</Button>
+                <Button>✔</Button>
                 <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle();}}>❌</Button>
             </div>
         </CommentWrapper>

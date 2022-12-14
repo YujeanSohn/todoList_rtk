@@ -17,8 +17,8 @@ export const __addComment = createAsyncThunk(
     "addComment",
     async (payload, thunkAPI) => {
         try {
-            await axios.post(`http://localhost:3001/comments`, {...payload, editHistory: ""});
-            return thunkAPI.fulfillWithValue({...payload, editHistory: ""});
+            await axios.post(`http://localhost:3001/comments`, {...payload, editHistory: 0});
+            return thunkAPI.fulfillWithValue({...payload, editHistory: 0});
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
         }
@@ -56,7 +56,7 @@ const initialState = {
             id: 0,
             todosId: "",
             content: "",
-            editHistory:"",
+            editHistory: 0,
         },
     ],
     isLoading: false,

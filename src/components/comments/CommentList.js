@@ -70,13 +70,12 @@ const CommentList = ({todosId}) => {
     return (
         <ListWrapper>
             <h2>Comments</h2>
-            <InputWrapper>
-                <Input type="text" placeholder="댓글을 입력해주세요" value={content} onChange={handleChangeContent} required/>
-                <Button type="button" onClick={(e) => {e.preventDefault();
-                const id = Date.now()
-                dispatch(__addComment({id, todosId, content}));
+            <InputWrapper onSubmit={(e) => {e.preventDefault();
+                dispatch(__addComment({id: Date.now(), todosId, content}));
                 setContent("");
-            }}>➕</Button>
+            }}>
+                <Input type="text" placeholder="댓글을 입력해주세요" value={content} onChange={handleChangeContent} required/>
+                <Button>➕</Button>
             </InputWrapper>
             {comments.map((comment) => {
                 return <Comments key={comment.id} comment={comment} />
