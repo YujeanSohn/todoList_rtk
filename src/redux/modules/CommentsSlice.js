@@ -5,7 +5,7 @@ export const __fetchComments = createAsyncThunk(
     "fetchComments",
     async (payload, thunkAPI)=>{
         try {
-            const {data} = await axios.get(`http://localhost:3001/comments?date=${payload}`);
+            const {data} = await axios.get(`http://localhost:3001/comments?todosId=${payload}`);
             return thunkAPI.fulfillWithValue(data);
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
@@ -17,8 +17,8 @@ export const __addComment = createAsyncThunk(
     "addComment",
     async (payload, thunkAPI) => {
         try {
-            await axios.post(`http://localhost:3001/comments`, payload);
-            return thunkAPI.fulfillWithValue(payload);
+            await axios.post(`http://localhost:3001/comments`, {...payload, editHistory: 0});
+            return thunkAPI.fulfillWithValue({...payload, editHistory: 0});
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
         }
@@ -27,10 +27,10 @@ export const __addComment = createAsyncThunk(
 
 export const __editComment = createAsyncThunk(
     "editComment",
-    async ({id, newContent}, thunkAPI)=>{
+    async ({id, newContent, editHistory}, thunkAPI)=>{
         try {
-            await axios.patch(`http://localhost:3001/comments/${id}`, {content: newContent});
-            return thunkAPI.fulfillWithValue({id, newContent});
+            await axios.patch(`http://localhost:3001/comments/${id}`, {content: newContent, editHistory});
+            return thunkAPI.fulfillWithValue({id, newContent, editHistory});
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
         }
@@ -54,8 +54,9 @@ const initialState = {
     comments: [
         {
             id: 0,
-            date: 0,
+            todosId: "",
             content: "",
+            editHistory: 0,
         },
     ],
     isLoading: false,
@@ -96,6 +97,7 @@ const CommentsSlice = createSlice({
             state.comments = state.comments.map((comment) => ({
                 ...comment,
                 content: comment.id === action.payload.id ? action.payload.newContent : comment.content,
+                editHistory: comment.id === action.payload.id ? action.payload.editHistory : comment.editHistory,
             }))
         },
         [__editComment.rejected]: (state, action) => {

@@ -23,16 +23,27 @@ const Input = styled.input`
   border: none;
 `;
 
+const DateSpan = styled.span`
+  font-size: small;
+  font-style: italic;
+  color: gray;
+  margin-right: 10px;
+`;
+
 const Button = styled.button`
   cursor: pointer;
   background-color: transparent;
   border: none;
 `;
 
-const Comments = ({comment: {id, content}}) => {
+const Comments = ({comment: {id, content, editHistory}}) => {
     const dispatch = useDispatch();
     const [toggle, setToggle] = useState(false);
     const [newContent, setNewContent] = useState(content);
+
+    let date = String(new Date(id)).replace("GMT+0900 (한국 표준시)", "");
+
+    if (editHistory) {date = String(new Date(editHistory)).replace("GMT+0900 (한국 표준시)", "(수정)")}
 
     const handleToggle = () => {
         setToggle((prev) => !prev);
@@ -42,23 +53,31 @@ const Comments = ({comment: {id, content}}) => {
         setNewContent(e.target.value);
     };
 
+    const editComment = (e) => {
+        e.preventDefault();
+        if (newContent === content) {
+            return alert("변경된 내용이 없습니다.");
+        }
+        dispatch(__editComment({id, newContent, editHistory: Date.now()}));
+        handleToggle();
+    }
+
     if (!toggle)
         return (
             <CommentWrapper><span>{newContent}</span>
                 <div>
+                    <DateSpan>{date}</DateSpan>
                     <Button type="button" onClick={(e) => {e.preventDefault(); handleToggle();}}>✏</Button>
                     <Button onClick={() => dispatch(__deleteComment(id))}>🗑️</Button>
                 </div>
             </CommentWrapper>
         )
     else return (
-        <CommentWrapper>
-            <Input type="text" value={newContent} onChange={handleChangeContent} required/>
+        <CommentWrapper onSubmit={editComment}>
+            <Input id="editInput" type="text" value={newContent} onChange={handleChangeContent} required/>
             <div>
-                <Button onClick={(e) => {e.preventDefault();
-                    dispatch(__editComment({id, newContent}));
-                    handleToggle();}}>✔</Button>
-                <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle();}}>❌</Button>
+                <Button>✔</Button>
+                <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle(); setNewContent(content);}}>❌</Button>
             </div>
         </CommentWrapper>
     );
