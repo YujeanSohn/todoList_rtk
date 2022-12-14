@@ -48,6 +48,10 @@ const TodoListBox = styled.div`
   }
 `;
 
+const CommentListWrapper = styled.div`
+  padding-top: 20px;
+`;
+
 function TodoList() {
   const { id } = useParams();
   const isLoading = useSelector((store) => store.todos.isLoading);
@@ -111,7 +115,9 @@ function TodoList() {
                   .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
               : "완료된 일이 없습니다."}
           </TodoListBox>
-          <CommentList todosId={id} />
+          <CommentListWrapper>
+            <CommentList todosId={id} />
+          </CommentListWrapper>
         </>
       )}
     </Wrapper>
