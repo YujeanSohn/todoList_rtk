@@ -68,7 +68,7 @@ const Comments = ({comment: {id, content, editHistory}}) => {
                 <div>
                     <DateSpan>{date}</DateSpan>
                     <Button type="button" onClick={(e) => {e.preventDefault(); handleToggle();}}>✏</Button>
-                    <Button onClick={() => dispatch(__deleteComment(id))}>🗑️</Button>
+                    <Button type="button" onClick={(e) => {e.preventDefault(); dispatch(__deleteComment(id));}}>🗑️</Button>
                 </div>
             </CommentWrapper>
         )
