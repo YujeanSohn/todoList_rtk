@@ -122,9 +122,19 @@ function Item({ todo, isToday }) {
   };
 
   const handleChangeTitle = ({ target: { value } }) => {
+    if (value.length > 15) {
+      alert("제목은 15자 이하로 작성해주세요");
+      return;
+    }
+
     setTitle(value);
   };
   const handleChangeContent = ({ target: { value } }) => {
+    if (value.length > 20) {
+      alert("내용은 20자 이하로 작성해주세요");
+      return;
+    }
+
     setContent(value);
   };
 
