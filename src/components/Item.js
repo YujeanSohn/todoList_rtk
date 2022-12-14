@@ -5,20 +5,47 @@ import { __deleteTodo, __updateTodo } from "../redux/modules/TodosSlice";
 
 const ItemBox = styled.div`
   width: 16%;
-  padding: 1%;
+  height: 180px;
+  padding: 20px 1%;
   float: left;
   flex: 0 0 auto;
   border: 3px solid cornflowerblue;
   border-radius: 20px;
 `;
 
+const ItemContentWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 150px;
+`;
+
 const ItemTitle = styled.h2`
+  margin: 0;
+  padding-bottom: 10px;
   font-weight: 800;
 `;
 
+const ItemInputWrapper = styled.div`
+  padding: 10px 0;
+`;
+
+const Label = styled.span`
+  width: 5%;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const ItemInput = styled.input`
+  width: 85%;
+  height: 20px;
+  float: right;
+`;
+
 const BtnWrapper = styled.div`
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
   width: 100%;
-  padding-top: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -121,59 +148,65 @@ function Item({ todo, isToday }) {
           ✖
         </DeleteBtn>
       </DeleteBtnWrapper>
-      {isModify ? (
-        <>
-          <div>제목</div>
-          <input
-            value={title}
-            onChange={handleChangeTitle}
-            type="text"
-            placeholder={todo.title}
-          />
-          <div>내용</div>
-          <input
-            value={content}
-            onChange={handleChangeContent}
-            type="text"
-            placeholder={todo.content}
-          />
-        </>
-      ) : (
-        <>
-          <ItemTitle>{todo.title}</ItemTitle>
-          {todo.content}
-        </>
-      )}
-      <BtnWrapper>
+      <ItemContentWrapper>
         {isModify ? (
-          <>
-            <Btn
-              onClick={handleUpdateTodoContent}
-              show={isToday}
-              bgColor="gray"
-              disabled={title === todo.title && content === todo.content}
-            >
-              수정완료
-            </Btn>
-            <Btn onClick={handleModifyState} show={isToday} bgColor="tomato">
-              수정취소
-            </Btn>
-          </>
+          <div>
+            <ItemInputWrapper>
+              <Label>제목</Label>
+              <ItemInput
+                value={title}
+                onChange={handleChangeTitle}
+                type="text"
+                placeholder={todo.title}
+              />
+            </ItemInputWrapper>
+            <ItemInputWrapper>
+              <Label>내용</Label>
+              <ItemInput
+                value={content}
+                onChange={handleChangeContent}
+                type="text"
+                placeholder={todo.content}
+              />
+            </ItemInputWrapper>
+          </div>
         ) : (
-          <>
-            <Btn onClick={handleModifyState} show={isToday} bgColor="gray">
-              수정하기
-            </Btn>
-            <Btn
-              onClick={handleUpdateTodoState}
-              show={isToday}
-              bgColor={todo.isDone ? "tomato" : "cornflowerBlue"}
-            >
-              {todo.isDone ? "취소" : "완료"}
-            </Btn>
-          </>
+          <div>
+            <ItemTitle>{todo.title}</ItemTitle>
+            {todo.content}
+          </div>
         )}
-      </BtnWrapper>
+        <BtnWrapper>
+          {isModify ? (
+            <>
+              <Btn
+                onClick={handleUpdateTodoContent}
+                show={isToday}
+                bgColor="gray"
+                disabled={title === todo.title && content === todo.content}
+              >
+                수정완료
+              </Btn>
+              <Btn onClick={handleModifyState} show={isToday} bgColor="tomato">
+                수정취소
+              </Btn>
+            </>
+          ) : (
+            <>
+              <Btn onClick={handleModifyState} show={isToday} bgColor="gray">
+                수정하기
+              </Btn>
+              <Btn
+                onClick={handleUpdateTodoState}
+                show={isToday}
+                bgColor={todo.isDone ? "tomato" : "cornflowerBlue"}
+              >
+                {todo.isDone ? "취소" : "완료"}
+              </Btn>
+            </>
+          )}
+        </BtnWrapper>
+      </ItemContentWrapper>
     </ItemBox>
   );
 }
