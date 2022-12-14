@@ -27,6 +27,7 @@ const DateSpan = styled.span`
   font-size: small;
   font-style: italic;
   color: gray;
+  margin-right: 10px;
 `;
 
 const Button = styled.button`
@@ -52,6 +53,15 @@ const Comments = ({comment: {id, content, editHistory}}) => {
         setNewContent(e.target.value);
     };
 
+    const editComment = (e) => {
+        e.preventDefault();
+        if (newContent === content) {
+            return alert("변경된 내용이 없습니다.");
+        }
+        dispatch(__editComment({id, newContent, editHistory: Date.now()}));
+        handleToggle();
+    }
+
     if (!toggle)
         return (
             <CommentWrapper><span>{newContent}</span>
@@ -63,13 +73,11 @@ const Comments = ({comment: {id, content, editHistory}}) => {
             </CommentWrapper>
         )
     else return (
-        <CommentWrapper onSubmit={(e) => {e.preventDefault();
-                    dispatch(__editComment({id, newContent, editHistory: Date.now()}));
-                    handleToggle();}}>
-            <Input type="text" value={newContent} onChange={handleChangeContent} required/>
+        <CommentWrapper onSubmit={editComment}>
+            <Input id="editInput" type="text" value={newContent} onChange={handleChangeContent} required/>
             <div>
                 <Button>✔</Button>
-                <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle();}}>❌</Button>
+                <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle(); setNewContent(content);}}>❌</Button>
             </div>
         </CommentWrapper>
     );

@@ -41,6 +41,8 @@ const CommentList = ({todosId}) => {
     const {comments, isLoading, error} = useSelector((state) => state.comments);
     const [content, setContent] = useState("");
 
+    todosId = Number(todosId)
+
     useLayoutEffect(() => {
         dispatch(__fetchComments(todosId));
     }, [dispatch]);
