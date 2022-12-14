@@ -78,9 +78,6 @@ const CommentsSlice = createSlice({
             state.isLoading = false;
             state.error = action.payload;
         },
-        [__addComment.pending]: (state) => {
-            state.isLoading = true;
-        },
         [__addComment.fulfilled]: (state, action) => {
             state.isLoading = false;
             state.comments = [...state.comments, action.payload];
@@ -88,9 +85,6 @@ const CommentsSlice = createSlice({
         [__addComment.rejected]: (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
-        },
-        [__editComment.pending]: (state) => {
-            state.isLoading = true;
         },
         [__editComment.fulfilled]: (state, action) => {
             state.isLoading = false;
@@ -103,9 +97,6 @@ const CommentsSlice = createSlice({
         [__editComment.rejected]: (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
-        },
-        [__deleteComment.pending]: (state) => {
-            state.isLoading = true;
         },
         [__deleteComment.fulfilled]: (state, action) => {
             state.isLoading = false;
