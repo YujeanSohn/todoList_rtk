@@ -46,19 +46,18 @@ const Comments = ({comment: {id, content}}) => {
         return (
             <CommentWrapper><span>{newContent}</span>
                 <div>
-                    <Button onClick={handleToggle}>✏</Button>
+                    <Button type="button" onClick={(e) => {e.preventDefault(); handleToggle();}}>✏</Button>
                     <Button onClick={() => dispatch(__deleteComment(id))}>🗑️</Button>
                 </div>
             </CommentWrapper>
         )
     else return (
-        <CommentWrapper onSubmit={(e) => {
-            e.preventDefault();
-            dispatch(__editComment({id, newContent}));
-        }}>
-            <Input type="text" placeholder={newContent} onChange={handleChangeContent} required/>
+        <CommentWrapper>
+            <Input type="text" value={newContent} onChange={handleChangeContent} required/>
             <div>
-                <Button>✔</Button>
+                <Button onClick={(e) => {e.preventDefault();
+                    dispatch(__editComment({id, newContent}));
+                    handleToggle();}}>✔</Button>
                 <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle();}}>❌</Button>
             </div>
         </CommentWrapper>
