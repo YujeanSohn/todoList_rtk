@@ -69,14 +69,11 @@ const ButtonSt = styled.button`
 function Home() {
   const navigate = useNavigate();
   const id = Date.now();
-  const date = new Date();
-  let day = date.getUTCDate();
 
   const [comments, setComments] = useState([]);
   const [allTodos, setAllTodos] = useState([]);
   const [todos, setTodos] = useState({
     id: 0,
-    day: 0,
     items: [],
   });
 
@@ -125,9 +122,8 @@ function Home() {
       await axios.post(`http://localhost:3001/todos`, {
         ...todos,
         id,
-        day,
       });
-      setAllTodos([...allTodos, { todos, id }]);
+      setAllTodos([...allTodos, { ...todos, id }]);
     } catch (e) {
       alert(e);
     }
