@@ -23,16 +23,26 @@ const Input = styled.input`
   border: none;
 `;
 
+const DateSpan = styled.span`
+  font-size: small;
+  font-style: italic;
+  color: gray;
+`;
+
 const Button = styled.button`
   cursor: pointer;
   background-color: transparent;
   border: none;
 `;
 
-const Comments = ({comment: {id, content}}) => {
+const Comments = ({comment: {id, content, editHistory}}) => {
     const dispatch = useDispatch();
     const [toggle, setToggle] = useState(false);
     const [newContent, setNewContent] = useState(content);
+
+    let date = String(new Date(id)).replace("GMT+0900 (한국 표준시)", "");
+
+    if (editHistory) {date = String(new Date(editHistory)).replace("GMT+0900 (한국 표준시)", "(수정)")}
 
     const handleToggle = () => {
         setToggle((prev) => !prev);
@@ -46,6 +56,7 @@ const Comments = ({comment: {id, content}}) => {
         return (
             <CommentWrapper><span>{newContent}</span>
                 <div>
+                    <DateSpan>{date}</DateSpan>
                     <Button type="button" onClick={(e) => {e.preventDefault(); handleToggle();}}>✏</Button>
                     <Button onClick={() => dispatch(__deleteComment(id))}>🗑️</Button>
                 </div>
@@ -56,7 +67,7 @@ const Comments = ({comment: {id, content}}) => {
             <Input type="text" value={newContent} onChange={handleChangeContent} required/>
             <div>
                 <Button onClick={(e) => {e.preventDefault();
-                    dispatch(__editComment({id, newContent}));
+                    dispatch(__editComment({id, newContent, editHistory: Date.now()}));
                     handleToggle();}}>✔</Button>
                 <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle();}}>❌</Button>
             </div>

@@ -36,14 +36,14 @@ const Button = styled.button`
   padding: 5px;
 `;
 
-const CommentList = ({date}) => {
+const CommentList = ({todosId}) => {
     const dispatch = useDispatch();
     const {comments, isLoading, error} = useSelector((state) => state.comments);
     const [content, setContent] = useState("");
 
     useLayoutEffect(() => {
-        dispatch(__fetchComments(date));
-    }, [dispatch, date]);
+        dispatch(__fetchComments(todosId));
+    }, [dispatch]);
 
     const handleChangeContent = (e) => {
         setContent(e.target.value);
@@ -70,13 +70,13 @@ const CommentList = ({date}) => {
     return (
         <ListWrapper>
             <h2>Comments</h2>
-            <InputWrapper onSubmit={(e) => {
-                e.preventDefault();
-                dispatch(__addComment({id: Date.now(), date, content}));
-                setContent("");
-            }}>
+            <InputWrapper>
                 <Input type="text" placeholder="댓글을 입력해주세요" value={content} onChange={handleChangeContent} required/>
-                <Button>➕</Button>
+                <Button type="button" onClick={(e) => {e.preventDefault();
+                const id = Date.now()
+                dispatch(__addComment({id, todosId, content}));
+                setContent("");
+            }}>➕</Button>
             </InputWrapper>
             {comments.map((comment) => {
                 return <Comments key={comment.id} comment={comment} />
