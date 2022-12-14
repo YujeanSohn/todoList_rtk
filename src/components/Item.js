@@ -63,20 +63,20 @@ function Item({ todo, isToday }) {
   const todosID = useSelector((store) => store.todos.todosID);
   const dispatch = useDispatch();
   const [isModify, setIsModify] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState(todo.title);
+  const [content, setContent] = useState(todo.content);
   const handleUpdateTodoContent = async () => {
     try {
       if (!isModify) {
         return;
       }
 
-      if (title.length === 0 || content.length === 0) {
+      if (title === todo.title && content === todo.content) {
         return;
       }
 
-      if (title === todo.title && content === todo.content) {
-        alert("변경된 내용이 없습니다.");
+      if (title.length === 0 || content.length === 0) {
+        alert("내용을 입력해주세요.");
         return;
       }
 
@@ -87,10 +87,10 @@ function Item({ todo, isToday }) {
           todo: { ...todo, title, content },
         })
       );
-    } finally {
-      setIsModify(!isModify);
       setTitle("");
       setContent("");
+    } finally {
+      setIsModify(!isModify);
     }
   };
   const handleChangeTitle = ({ target: { value } }) => {
@@ -146,7 +146,7 @@ function Item({ todo, isToday }) {
       <BtnWrapper>
         <Btn onClick={handleUpdateTodoContent} show={isToday} bgColor="gray">
           {isModify
-            ? title.length === 0 || content.length === 0
+            ? title === todo.title && content === todo.content
               ? "취소"
               : "수정완료"
             : "수정하기"}
