@@ -3,6 +3,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Progressbar from "../components/Progressbar";
+import { __getTodos } from "../redux/modules/TodosSlice";
+import { useSelector } from "react-redux";
 
 const Wrapper = styled.div`
   padding: 20px;
@@ -73,12 +75,11 @@ function Home() {
   const [comments, setComments] = useState([]);
   const [allTodos, setAllTodos] = useState([]);
   const [todos, setTodos] = useState({
-    id: 0,
+    id: id,
     items: [],
   });
 
   useEffect(() => {
-    setTodos({ ...todos, id });
     getAllTodos();
     getComments();
   }, []);
@@ -132,17 +133,17 @@ function Home() {
   return (
     <Wrapper>
       <Header>
-        <Logo>TODO 🎯</Logo>
+        <Logo>TODO LIST🎯</Logo>
       </Header>
       <ButtonSt onClick={() => addTodos(id)}>+</ButtonSt>
       <CardListWrapper>
         {allTodos.map((todos) => {
-          let today = new Date(todos.id);
-          let year = today.getFullYear();
-          let month = today.getMonth() + 1;
-          let day = today.getDate();
+          const today = new Date(todos.id);
+          const year = today.getFullYear();
+          const month = today.getMonth() + 1;
+          const day = today.getDate();
 
-          let commentcount = comments.filter(
+          const commentcount = comments.filter(
             (comment) => todos.id === comment.todosId
           ).length;
 
