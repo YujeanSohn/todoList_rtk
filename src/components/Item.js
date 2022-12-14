@@ -65,12 +65,14 @@ function Item({ todo, isToday }) {
   const [isModify, setIsModify] = useState(false);
   const [title, setTitle] = useState(todo.title);
   const [content, setContent] = useState(todo.content);
+  const handleModifyState = () => {
+    setIsModify(!isModify);
+    setTitle(todo.title);
+    setContent(todo.content);
+  };
+
   const handleUpdateTodoContent = async () => {
     try {
-      if (!isModify) {
-        return;
-      }
-
       if (title === todo.title && content === todo.content) {
         return;
       }
@@ -87,12 +89,11 @@ function Item({ todo, isToday }) {
           todo: { ...todo, title, content },
         })
       );
-      setTitle("");
-      setContent("");
     } finally {
       setIsModify(!isModify);
     }
   };
+
   const handleChangeTitle = ({ target: { value } }) => {
     setTitle(value);
   };
@@ -144,20 +145,34 @@ function Item({ todo, isToday }) {
         </>
       )}
       <BtnWrapper>
-        <Btn onClick={handleUpdateTodoContent} show={isToday} bgColor="gray">
-          {isModify
-            ? title === todo.title && content === todo.content
-              ? "취소"
-              : "수정완료"
-            : "수정하기"}
-        </Btn>
-        <Btn
-          onClick={handleUpdateTodoState}
-          show={isToday}
-          bgColor={todo.isDone ? "tomato" : "cornflowerBlue"}
-        >
-          {todo.isDone ? "취소" : "완료"}
-        </Btn>
+        {isModify ? (
+          <>
+            <Btn
+              onClick={handleUpdateTodoContent}
+              show={isToday}
+              bgColor="gray"
+              disabled={title === todo.title && content === todo.content}
+            >
+              수정완료
+            </Btn>
+            <Btn onClick={handleModifyState} show={isToday} bgColor="tomato">
+              수정취소
+            </Btn>
+          </>
+        ) : (
+          <>
+            <Btn onClick={handleModifyState} show={isToday} bgColor="gray">
+              수정하기
+            </Btn>
+            <Btn
+              onClick={handleUpdateTodoState}
+              show={isToday}
+              bgColor={todo.isDone ? "tomato" : "cornflowerBlue"}
+            >
+              {todo.isDone ? "취소" : "완료"}
+            </Btn>
+          </>
+        )}
       </BtnWrapper>
     </ItemBox>
   );
