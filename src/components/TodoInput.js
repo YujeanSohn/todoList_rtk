@@ -42,6 +42,7 @@ function TodoInput({ isToday }) {
     title: "",
     content: "",
     isDone: false,
+    editHistory: 0,
   });
   const ref = useRef();
 
