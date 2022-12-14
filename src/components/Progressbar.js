@@ -60,9 +60,8 @@ const StateIcon = styled.span`
   transition: font-size 1s;
 `;
 
-function Progressbar() {
-  const todos = useSelector((store) => store.todos.todos);
-  const donesCount = todos.filter((v) => v.isDone === true).length;
+function Progressbar({ todos }) {
+  const donesCount = todos?.filter((v) => v.isDone === true).length;
   const donesPercentage = (donesCount / todos.length) * 100;
   return (
     <Wrapper>
