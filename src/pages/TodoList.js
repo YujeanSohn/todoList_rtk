@@ -61,9 +61,8 @@ function TodoList() {
   const scrollRef = useRef(null);
 
   const setScroll = () => {
-    if (scrollRef.current !== null) {
-      scrollRef.current.scrollLeft += 300 * (todos.length - 1);
-    }
+    if (!scrollRef?.current) return;
+    scrollRef.current.scrollLeft += 300 * (todos.length - 1);
   };
 
   useEffect(() => {
@@ -101,17 +100,17 @@ function TodoList() {
         <>
           <h1>Working</h1>
           <TodoListBox ref={scrollRef}>
-            {todos.filter((v) => v.isDone === false).length !== 0
+            {todos.filter((v) => !v.isDone).length !== 0
               ? todos
-                  .filter((v) => v.isDone === false)
+                  .filter((v) => !v.isDone)
                   .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
               : "추가된 할일이 없습니다."}
           </TodoListBox>
           <h1>Done</h1>
           <TodoListBox>
-            {todos.filter((v) => v.isDone === true).length !== 0
+            {todos.filter((v) => v.isDone).length !== 0
               ? todos
-                  .filter((v) => v.isDone === true)
+                  .filter((v) => v.isDone)
                   .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
               : "완료된 일이 없습니다."}
           </TodoListBox>

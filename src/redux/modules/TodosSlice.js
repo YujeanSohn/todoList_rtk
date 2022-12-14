@@ -80,22 +80,13 @@ const todosSlice = createSlice({
       state.todosID = action.payload.id;
       state.todos = action.payload.items;
     });
-    builder.addCase(__addTodo.pending, (state) => {
-      state.isLoading = true;
-    });
     builder.addCase(__addTodo.fulfilled, (state, action) => {
       state.isLoading = false;
       state.todos = [...state.todos, action.payload];
     });
-    builder.addCase(__updateTodo.pending, (state) => {
-      state.isLoading = true;
-    });
     builder.addCase(__updateTodo.fulfilled, (state, action) => {
       state.isLoading = false;
       state.todos = action.payload;
-    });
-    builder.addCase(__deleteTodo.pending, (state) => {
-      state.isLoading = true;
     });
     builder.addCase(__deleteTodo.fulfilled, (state, action) => {
       state.isLoading = false;
