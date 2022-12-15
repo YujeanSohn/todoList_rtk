@@ -1,12 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import client from "../../api/client";
 
-const initialState = {
-  todos: [],
-  todosID: 0,
-  isLoading: false,
-};
-
 export const __getTodos = createAsyncThunk(
   "getTodos",
   async (payload, thunkAPI) => {
@@ -65,6 +59,20 @@ export const __deleteTodo = createAsyncThunk(
     }
   }
 );
+
+const initialState = {
+  todos: [
+    {
+      id: 0,
+      title: "",
+      content: "",
+      isDone: false,
+      editHistory: 0,
+    },
+  ],
+  todosID: 0,
+  isLoading: false,
+};
 
 const todosSlice = createSlice({
   name: "todos",
