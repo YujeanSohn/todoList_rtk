@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   width: 100%;
-  padding: 20px 0;
+  padding-bottom: 20px;
 `;
 
 const ContentWrapper = styled.div`
@@ -16,7 +16,6 @@ const ContentWrapper = styled.div`
 
 const ContentTitle = styled.h2`
   font-weight: 800;
-  padding-bottom: 20px;
 `;
 
 const ProgressBarWrapper = styled.div`

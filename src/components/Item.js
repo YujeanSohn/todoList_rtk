@@ -133,7 +133,9 @@ function Item({ todo, isToday }) {
   };
 
   const handleDeleteTodo = () => {
-    dispatch(__deleteTodo({ todosID, todos, todoID: todo.id }));
+    if(window.confirm("정말 삭제하시겠습니까?")) {
+      dispatch(__deleteTodo({ todosID, todos, todoID: todo.id }));
+    }
   };
   return (
     <ItemBox>
@@ -152,6 +154,7 @@ function Item({ todo, isToday }) {
                 onChange={onChangeTitle}
                 type="text"
                 placeholder={todo.title}
+                autoFocus
               />
             </ItemInputWrapper>
             <ItemInputWrapper>

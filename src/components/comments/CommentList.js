@@ -49,15 +49,6 @@ const CommentList = ({todosId}) => {
         dispatch(__fetchComments(todosId));
     }, [dispatch, todosId]);
 
-    if (isLoading) {
-        return (
-            <ListWrapper>
-                <h2>Comments</h2>
-                <div>로딩 중....</div>
-            </ListWrapper>
-        )
-    }
-
     if (error) {
         return (
             <ListWrapper>
@@ -70,16 +61,22 @@ const CommentList = ({todosId}) => {
     return (
         <ListWrapper>
             <h2>Comments</h2>
-            <InputWrapper onSubmit={(e) => {e.preventDefault();
-                dispatch(__addComment({id: Date.now(), todosId, content}));
-                reset();
-            }}>
-                <Input type="text" placeholder="댓글을 입력해주세요" value={content} onChange={onChange} required/>
-                <Button>➕</Button>
-            </InputWrapper>
-            {comments.map((comment) => {
-                return <Comments key={comment.id} comment={comment} />
-            })}
+            {
+                isLoading ? <div>로딩 중....</div> :
+                    <>
+                        <InputWrapper onSubmit={(e) => {
+                            e.preventDefault();
+                            dispatch(__addComment({id: Date.now(), todosId, content}));
+                            reset();
+                        }}>
+                            <Input type="text" placeholder="댓글을 입력해주세요" value={content} onChange={onChange} required/>
+                            <Button>➕</Button>
+                        </InputWrapper>
+                        {comments.map((comment) => {
+                            return <Comments key={comment.id} comment={comment}/>
+                        })}
+                    </>
+            }
         </ListWrapper>
     );
 };
