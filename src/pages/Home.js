@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import client from "../api/client";
 import Progressbar from "../components/Progressbar";
 
 const Wrapper = styled.div`
@@ -84,7 +84,7 @@ function Home() {
 
   const getAllTodos = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:3001/todos`);
+      const { data } = await client.get(`/todos`);
       setAllTodos(data);
     } catch (e) {
       alert(e);
@@ -93,7 +93,7 @@ function Home() {
 
   const getComments = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:3001/Comments`);
+      const { data } = await client.get(`/comments`);
       setComments(data);
     } catch (e) {
       alert(e);
@@ -118,7 +118,7 @@ function Home() {
       return;
     }
     try {
-      await axios.post(`http://localhost:3001/todos`, {
+      await client.post(`/todos`, {
         ...todos,
         id,
       });

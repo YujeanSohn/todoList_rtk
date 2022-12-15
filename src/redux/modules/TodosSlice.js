@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import client from "../../api/client";
 
 const initialState = {
   todos: [],
@@ -11,9 +11,7 @@ export const __getTodos = createAsyncThunk(
   "getTodos",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:3001/todos/${payload}`
-      );
+      const { data } = await client.get(`/todos/${payload}`);
       return thunkAPI.fulfillWithValue(data);
     } catch (e) {
       alert(`getTodoError: ${e}`);
@@ -25,7 +23,7 @@ export const __addTodo = createAsyncThunk(
   "addTodo",
   async (payload, thunkAPI) => {
     try {
-      await axios.patch(`http://localhost:3001/todos/${payload.todosID}`, {
+      await client.patch(`/todos/${payload.todosID}`, {
         items: [...payload.todos, payload.todo],
       });
       return thunkAPI.fulfillWithValue(payload.todo);
@@ -43,7 +41,7 @@ export const __updateTodo = createAsyncThunk(
         if (v.id === payload.todo.id) return payload.todo;
         return v;
       });
-      await axios.patch(`http://localhost:3001/todos/${payload.todosID}`, {
+      await client.patch(`/todos/${payload.todosID}`, {
         items: updatedTodos,
       });
       return thunkAPI.fulfillWithValue(updatedTodos);
@@ -58,7 +56,7 @@ export const __deleteTodo = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const updatedTodos = payload.todos.filter((v) => v.id !== payload.todoID);
-      await axios.patch(`http://localhost:3001/todos/${payload.todosID}`, {
+      await client.patch(`/todos/${payload.todosID}`, {
         items: updatedTodos,
       });
       return thunkAPI.fulfillWithValue(updatedTodos);
