@@ -1,7 +1,9 @@
-import React, {useLayoutEffect, useState} from "react";
+import React, {useLayoutEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {__fetchComments, __addComment} from "../../redux/modules/CommentsSlice";
 import Comments from "./Comment";
+
+import useInput from "../../hooks/useInput";
 
 import styled from "styled-components";
 
@@ -39,17 +41,13 @@ const Button = styled.button`
 const CommentList = ({todosId}) => {
     const dispatch = useDispatch();
     const {comments, isLoading, error} = useSelector((state) => state.comments);
-    const [content, setContent] = useState("");
+    const [content, onChange, reset] = useInput("", "comment");
 
     todosId = Number(todosId)
 
     useLayoutEffect(() => {
         dispatch(__fetchComments(todosId));
-    }, [dispatch]);
-
-    const handleChangeContent = (e) => {
-        setContent(e.target.value);
-    };
+    }, [dispatch, todosId]);
 
     if (isLoading) {
         return (
@@ -74,9 +72,9 @@ const CommentList = ({todosId}) => {
             <h2>Comments</h2>
             <InputWrapper onSubmit={(e) => {e.preventDefault();
                 dispatch(__addComment({id: Date.now(), todosId, content}));
-                setContent("");
+                reset();
             }}>
-                <Input type="text" placeholder="댓글을 입력해주세요" value={content} onChange={handleChangeContent} required/>
+                <Input type="text" placeholder="댓글을 입력해주세요" value={content} onChange={onChange} required/>
                 <Button>➕</Button>
             </InputWrapper>
             {comments.map((comment) => {

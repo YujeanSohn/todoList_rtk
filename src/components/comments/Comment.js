@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import {useDispatch} from "react-redux";
 import {__editComment, __deleteComment} from "../../redux/modules/CommentsSlice";
 
+import useInput from "../../hooks/useInput";
+
 import styled from "styled-components";
 
 const CommentWrapper = styled.form`
@@ -39,7 +41,7 @@ const Button = styled.button`
 const Comments = ({comment: {id, content, editHistory}}) => {
     const dispatch = useDispatch();
     const [toggle, setToggle] = useState(false);
-    const [newContent, setNewContent] = useState(content);
+    const [newContent, onChange, reset] = useInput(content, "comment");
 
     let date = String(new Date(id)).replace("GMT+0900 (한국 표준시)", "");
 
@@ -47,10 +49,6 @@ const Comments = ({comment: {id, content, editHistory}}) => {
 
     const handleToggle = () => {
         setToggle((prev) => !prev);
-    };
-
-    const handleChangeContent = (e) => {
-        setNewContent(e.target.value);
     };
 
     const editComment = (e) => {
@@ -74,10 +72,10 @@ const Comments = ({comment: {id, content, editHistory}}) => {
         )
     else return (
         <CommentWrapper onSubmit={editComment}>
-            <Input id="editInput" type="text" value={newContent} onChange={handleChangeContent} required/>
+            <Input id="editInput" type="text" value={newContent} onChange={onChange} required/>
             <div>
                 <Button>✔</Button>
-                <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle(); setNewContent(content);}}>❌</Button>
+                <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle(); reset();}}>❌</Button>
             </div>
         </CommentWrapper>
     );
