@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useInput  from "../hooks/useInput";
 import styled from "styled-components";
 import { __addTodo } from "../redux/modules/TodosSlice";
 
@@ -37,49 +38,23 @@ function TodoInput({ isToday }) {
   const id = Date.now();
   const todos = useSelector((store) => store.todos.todos);
   const todosID = useSelector((store) => store.todos.todosID);
-  const [todo, setTodo] = useState({
-    id,
-    title: "",
-    content: "",
-    isDone: false,
-    editHistory: 0,
-  });
+  const [title, onChangeTitle, resetTitle] = useInput("", "title");
+  const [content, onChangeContent, resetContent] = useInput("", "content");
+
   const ref = useRef();
-
-  const handleChangeTitle = ({ target: { value } }) => {
-    if (value.length > 15) {
-      alert("제목은 15자 이하로 작성해주세요");
-      return;
-    }
-
-    setTodo({ ...todo, title: value });
-  };
-
-  const handleChangeContent = ({ target: { value } }) => {
-    if (value.length > 20) {
-      alert("내용은 20자 이하로 작성해주세요");
-      return;
-    }
-
-    setTodo({ ...todo, content: value });
-  };
 
   const dispatch = useDispatch();
   const addTodo = () => {
     try {
-      if (todo.title.length === 0 || todo.content.length === 0) {
+      if (title.length === 0 || content.length === 0) {
         alert("내용을 입력해주세요.");
         return;
       }
 
-      dispatch(__addTodo({ todosID, todos, todo }));
+      dispatch(__addTodo({ todosID, todos, todo: {id, title, content, isDone: false, editHistory: 0}}));
     } finally {
-      setTodo({
-        id,
-        title: "",
-        content: "",
-        isDone: false,
-      });
+      resetTitle();
+      resetContent();
 
       ref.current.focus();
     }
@@ -92,8 +67,8 @@ function TodoInput({ isToday }) {
           <Label>제목</Label>
           <Input
             ref={ref}
-            value={todo.title}
-            onChange={handleChangeTitle}
+            value={title}
+            onChange={onChangeTitle}
             type="text"
             placeholder="내용을 입력해주세요."
             disabled={!isToday}
@@ -102,8 +77,8 @@ function TodoInput({ isToday }) {
         <InputWrapper>
           <Label>내용</Label>
           <Input
-            value={todo.content}
-            onChange={handleChangeContent}
+            value={content}
+            onChange={onChangeContent}
             type="text"
             placeholder="내용을 입력해주세요."
             disabled={!isToday}
@@ -112,7 +87,7 @@ function TodoInput({ isToday }) {
       </div>
       <Btn
         onClick={addTodo}
-        disabled={todo.title.length === 0 || todo.content.length === 0}
+        disabled={title.length === 0 || content.length === 0}
       >
         추가하기
       </Btn>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useInput  from "../hooks/useInput";
 import styled from "styled-components";
 import { __deleteTodo, __updateTodo } from "../redux/modules/TodosSlice";
 
@@ -90,12 +91,12 @@ function Item({ todo, isToday }) {
   const todosID = useSelector((store) => store.todos.todosID);
   const dispatch = useDispatch();
   const [isModify, setIsModify] = useState(false);
-  const [title, setTitle] = useState(todo.title);
-  const [content, setContent] = useState(todo.content);
+  const [title, onChangeTitle, resetTitle] = useInput(todo.title, "title");
+  const [content, onChangeContent, resetContent] = useInput(todo.content, "content");
   const handleModifyState = () => {
     setIsModify(!isModify);
-    setTitle(todo.title);
-    setContent(todo.content);
+    resetTitle();
+    resetContent();
   };
 
   const handleUpdateTodoContent = async () => {
@@ -119,23 +120,6 @@ function Item({ todo, isToday }) {
     } finally {
       setIsModify(!isModify);
     }
-  };
-
-  const handleChangeTitle = ({ target: { value } }) => {
-    if (value.length > 15) {
-      alert("제목은 15자 이하로 작성해주세요");
-      return;
-    }
-
-    setTitle(value);
-  };
-  const handleChangeContent = ({ target: { value } }) => {
-    if (value.length > 20) {
-      alert("내용은 20자 이하로 작성해주세요");
-      return;
-    }
-
-    setContent(value);
   };
 
   const handleUpdateTodoState = () => {
@@ -165,7 +149,7 @@ function Item({ todo, isToday }) {
               <Label>제목</Label>
               <ItemInput
                 value={title}
-                onChange={handleChangeTitle}
+                onChange={onChangeTitle}
                 type="text"
                 placeholder={todo.title}
               />
@@ -174,7 +158,7 @@ function Item({ todo, isToday }) {
               <Label>내용</Label>
               <ItemInput
                 value={content}
-                onChange={handleChangeContent}
+                onChange={onChangeContent}
                 type="text"
                 placeholder={todo.content}
               />
