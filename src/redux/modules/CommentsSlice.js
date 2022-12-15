@@ -77,7 +77,7 @@ const CommentsSlice = createSlice({
     },
     [__fetchComments.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.comments = action.payload;
+      state.comments = action.payload.reverse();
     },
     [__fetchComments.rejected]: (state, action) => {
       state.isLoading = false;
@@ -85,7 +85,7 @@ const CommentsSlice = createSlice({
     },
     [__addComment.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.comments = [...state.comments, action.payload];
+      state.comments = [action.payload, ...state.comments];
     },
     [__addComment.rejected]: (state, action) => {
       state.isLoading = false;
