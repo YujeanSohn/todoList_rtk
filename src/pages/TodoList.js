@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from "react";
-import styled from "styled-components";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
 import { __getTodos } from "../redux/modules/TodosSlice";
 import Progressbar from "../components/Progressbar";
 import TodoInput from "../components/TodoInput";
-import Item from "../components/Item";
+import Items from "../components/Items";
 import CommentList from "../components/comments/CommentList";
-import { useParams } from "react-router-dom";
 
 const Wrapper = styled.div`
   padding: 20px;
@@ -26,8 +26,8 @@ const Logo = styled.span`
 
 const InfoBox = styled.div`
   width: 100%;
-  height: 50vh;
-  line-height: 50vh;
+  height: 180px;
+  line-height: 180px;
   text-align: center;
   color: #ccc;
 `;
@@ -129,33 +129,35 @@ function TodoList() {
       </Header>
       <Progressbar todos={todos} isSmallSize={false}></Progressbar>
       <TodoInput isToday={isToday()}></TodoInput>
-      {isLoading ? (
-        <InfoBox>데이터를 불러오는 중입니다.</InfoBox>
-      ) : todos.length === 0 ? (
+      <h1>Working</h1>
+      {!isLoading && todos.length === 0 ? (
         <InfoBox>새로운 할일을 추가해보세요!</InfoBox>
       ) : (
-        <>
-          <h1>Working</h1>
-          <TodoListBox ref={workingScrollRef}>
-            {workings.length !== 0
-              ? workings.map((v) => (
-                  <Item key={v.id} todo={v} isToday={isToday()} />
-                ))
-              : "추가된 할일이 없습니다."}
-          </TodoListBox>
-          <h1>Done</h1>
-          <TodoListBox ref={doneScrollRef}>
-            {dones.length !== 0
-              ? dones.map((v) => (
-                  <Item key={v.id} todo={v} isToday={isToday()} />
-                ))
-              : "완료된 일이 없습니다."}
-          </TodoListBox>
-          <CommentListWrapper>
-            <CommentList todosId={id} />
-          </CommentListWrapper>
-        </>
+        <TodoListBox ref={workingScrollRef}>
+          <Items
+            type="working"
+            isLoading={isLoading}
+            todos={workings}
+            isToday={isToday}
+          ></Items>
+        </TodoListBox>
       )}
+      <h1>Done</h1>
+      {!isLoading && todos.length === 0 ? (
+        <InfoBox>새로운 할일을 추가해보세요!</InfoBox>
+      ) : (
+        <TodoListBox ref={doneScrollRef}>
+          <Items
+            type="done"
+            isLoading={isLoading}
+            todos={dones}
+            isToday={isToday}
+          ></Items>
+        </TodoListBox>
+      )}
+      <CommentListWrapper>
+        <CommentList todosId={id} />
+      </CommentListWrapper>
     </Wrapper>
   );
 }
