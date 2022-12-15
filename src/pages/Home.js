@@ -28,6 +28,15 @@ const CardListWrapper = styled.div`
   align-items: center;
 `;
 
+const InfoBox = styled.div`
+  width: 100%;
+  height: 180px;
+  line-height: 180px;
+  text-align: center;
+  color: #ccc;
+  font-weight: 800;
+`;
+
 const CardWrapper = styled.div`
   cursor: pointer;
   width: 18%;
@@ -37,7 +46,7 @@ const CardWrapper = styled.div`
   margin: 10px;
   border: 5px solid cornflowerblue;
   border-radius: 20px;
-  &: hover {
+  &:hover {
     background-color: lightgray;
   }
 `;
@@ -89,11 +98,11 @@ function Home() {
   }, []);
 
   const getAllTodos = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const { data } = await client.get(`/todos`);
       setAllTodos(data);
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (e) {
       alert(e);
     }
@@ -143,35 +152,34 @@ function Home() {
       </Header>
       <ButtonSt onClick={() => addTodos(id)}>+</ButtonSt>
       <CardListWrapper>
-        {isLoading ?
-            <h2 style={{
-              marginLeft: "30px"
-            }}>로딩 중....</h2>
-            :
-            allTodos.map((todos) => {
-              const today = new Date(todos.id);
-              const year = today.getFullYear();
-              const month = today.getMonth() + 1;
-              const day = today.getDate();
+        {isLoading ? (
+          <InfoBox>데이터를 불러오는 중입니다.</InfoBox>
+        ) : (
+          allTodos.map((todos) => {
+            const today = new Date(todos.id);
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
 
-              const commentcount = comments.filter(
-                  (comment) => todos.id === comment.todosId
-              ).length;
+            const commentcount = comments.filter(
+              (comment) => todos.id === comment.todosId
+            ).length;
 
-              return (
-                  <CardWrapper
-                      type="button"
-                      onClick={() => {
-                        navigate(`/todos/${todos.id}`);
-                      }}
-                      key={todos.id}
-                  >
-                    <DateSt>{year + "년" + month + "월" + day + "일"}</DateSt>
-                    <Progressbar todos={todos.items} isSmallSize={true}/>
-                    <CommentCount>💬{commentcount}</CommentCount>
-                  </CardWrapper>
-              );
-            })}
+            return (
+              <CardWrapper
+                type="button"
+                onClick={() => {
+                  navigate(`/todos/${todos.id}`);
+                }}
+                key={todos.id}
+              >
+                <DateSt>{year + "년" + month + "월" + day + "일"}</DateSt>
+                <Progressbar todos={todos.items} isSmallSize={true} />
+                <CommentCount>💬{commentcount}</CommentCount>
+              </CardWrapper>
+            );
+          })
+        )}
       </CardListWrapper>
     </Wrapper>
   );
