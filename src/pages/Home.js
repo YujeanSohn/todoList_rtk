@@ -29,6 +29,7 @@ const CardListWrapper = styled.div`
 `;
 
 const CardWrapper = styled.div`
+  cursor: pointer;
   width: 18%;
   padding: 1%;
   float: left;
@@ -36,6 +37,9 @@ const CardWrapper = styled.div`
   margin: 10px;
   border: 5px solid cornflowerblue;
   border-radius: 20px;
+  &: hover {
+    background-color: lightgray;
+  }
 `;
 
 const DateSt = styled.div`
@@ -52,6 +56,7 @@ const CommentCount = styled.div`
 `;
 
 const ButtonSt = styled.button`
+  cursor: pointer;
   position: absolute;
   right: 50px;
   width: 40px;
@@ -72,10 +77,10 @@ function Home() {
 
   const [comments, setComments] = useState([]);
   const [allTodos, setAllTodos] = useState([]);
-  const [todos, setTodos] = useState({
+  const todos = {
     id,
     items: [],
-  });
+  };
 
   useEffect(() => {
     getAllTodos();

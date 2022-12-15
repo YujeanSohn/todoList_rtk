@@ -58,7 +58,14 @@ const Comments = ({comment: {id, content, editHistory}}) => {
         }
         dispatch(__editComment({id, newContent, editHistory: Date.now()}));
         handleToggle();
-    }
+    };
+
+    const deleteComment = (e) => {
+        e.preventDefault();
+        if(window.confirm("정말 삭제하시겠습니까?")) {
+            dispatch(__deleteComment(id));
+        }
+    };
 
     if (!toggle)
         return (
@@ -66,13 +73,13 @@ const Comments = ({comment: {id, content, editHistory}}) => {
                 <div>
                     <DateSpan>{date}</DateSpan>
                     <Button type="button" onClick={(e) => {e.preventDefault(); handleToggle();}}>✏</Button>
-                    <Button type="button" onClick={(e) => {e.preventDefault(); dispatch(__deleteComment(id));}}>🗑️</Button>
+                    <Button type="button" onClick={deleteComment}>🗑️</Button>
                 </div>
             </CommentWrapper>
         )
     else return (
         <CommentWrapper onSubmit={editComment}>
-            <Input id="editInput" type="text" value={newContent} onChange={onChange} required/>
+            <Input id="editInput" type="text" value={newContent} onChange={onChange} autoFocus required/>
             <div>
                 <Button>✔</Button>
                 <Button type="button" onClick={(e)=>{e.preventDefault(); handleToggle(); reset();}}>❌</Button>

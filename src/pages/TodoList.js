@@ -10,6 +10,7 @@ import CommentList from "../components/comments/CommentList";
 import { useParams } from "react-router-dom";
 
 const Wrapper = styled.div`
+  padding: 20px;
   width: 100%;
 `;
 
