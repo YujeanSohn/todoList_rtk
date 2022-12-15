@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {memo, useState} from "react";
 import {useDispatch} from "react-redux";
 import {__editComment, __deleteComment} from "../../redux/modules/CommentsSlice";
 
@@ -38,7 +38,7 @@ const Button = styled.button`
   border: none;
 `;
 
-const Comments = ({comment: {id, content, editHistory}}) => {
+const Comments = memo(({comment: {id, content, editHistory}}) => {
     const dispatch = useDispatch();
     const [toggle, setToggle] = useState(false);
     const [newContent, onChange, reset] = useInput(content, "comment");
@@ -86,6 +86,6 @@ const Comments = ({comment: {id, content, editHistory}}) => {
             </div>
         </CommentWrapper>
     );
-};
+});
 
 export default Comments;
