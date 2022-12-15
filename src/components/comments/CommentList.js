@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useCallback} from "react";
+import React, {useLayoutEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {__fetchComments, __addComment} from "../../redux/modules/CommentsSlice";
 import Comments from "./Comment";

@@ -75,6 +75,7 @@ function Home() {
   const navigate = useNavigate();
   const id = Date.now();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [comments, setComments] = useState([]);
   const [allTodos, setAllTodos] = useState([]);
   const todos = {
@@ -88,9 +89,11 @@ function Home() {
   }, []);
 
   const getAllTodos = async () => {
+    setIsLoading(true)
     try {
       const { data } = await axios.get(`http://localhost:3001/todos`);
       setAllTodos(data);
+      setIsLoading(false)
     } catch (e) {
       alert(e);
     }
@@ -132,6 +135,22 @@ function Home() {
       alert(e);
     }
   };
+
+  if (isLoading) {
+    return (
+        <Wrapper>
+          <Header>
+            <Logo>TODO LIST🎯</Logo>
+          </Header>
+          <ButtonSt onClick={() => addTodos(id)}>+</ButtonSt>
+          <CardListWrapper>
+          <h2 style={{
+            marginLeft: "30px"
+          }}>로딩 중....</h2>
+          </CardListWrapper>
+        </Wrapper>
+    )
+  }
 
   return (
     <Wrapper>
