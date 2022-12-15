@@ -127,7 +127,7 @@ function Item({ todo, isToday }) {
       __updateTodo({
         todosID,
         todos,
-        todo: { ...todo, isDone: !todo.isDone },
+        todo: { ...todo, isDone: !todo.isDone, editHistory: Date.now() },
       })
     );
   };

@@ -51,7 +51,7 @@ function TodoInput({ isToday }) {
         return;
       }
 
-      dispatch(__addTodo({ todosID, todos, todo: {id, title, content, isDone: false}}));
+      dispatch(__addTodo({ todosID, todos, todo: {id, title, content, isDone: false, editHistory: 0}}));
     } finally {
       resetTitle();
       resetContent();

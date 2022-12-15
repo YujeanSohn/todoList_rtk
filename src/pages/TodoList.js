@@ -55,20 +55,55 @@ const CommentListWrapper = styled.div`
 function TodoList() {
   const { id } = useParams();
   const isLoading = useSelector((store) => store.todos.isLoading);
-  const todos = useSelector((store) => store.todos.todos);
   const todosID = useSelector((store) => store.todos.todosID);
-  const dispatch = useDispatch();
-  const scrollRef = useRef(null);
+  const todos = useSelector((store) => store.todos.todos);
+  const workings = useSelector((store) =>
+    store.todos.todos
+      .filter((v) => !v.isDone)
+      .sort((a, b) => {
+        if (a.editHistory > b.editHistory) return 1;
+        if (a.editHistory < b.editHistory) return -1;
 
-  const setScroll = () => {
-    if (scrollRef.current !== null) {
-      scrollRef.current.scrollLeft += 300 * (todos.length - 1);
-    }
+        if (a.id > b.id) return 1;
+        if (a.id < b.id) return -1;
+
+        return 0;
+      })
+  );
+  const dones = useSelector((store) =>
+    store.todos.todos
+      .filter((v) => v.isDone)
+      .sort((a, b) => {
+        if (a.editHistory > b.editHistory) return 1;
+        if (a.editHistory < b.editHistory) return -1;
+
+        if (a.id > b.id) return 1;
+        if (a.id < b.id) return -1;
+
+        return 0;
+      })
+  );
+  const dispatch = useDispatch();
+  const workingScrollRef = useRef(null);
+  const doneScrollRef = useRef(null);
+
+  const setWorkingsScroll = () => {
+    if (!workingScrollRef?.current) return;
+    workingScrollRef.current.scrollLeft += 300 * (workings.length - 1);
+  };
+
+  const setDonesScroll = () => {
+    if (!doneScrollRef?.current) return;
+    doneScrollRef.current.scrollLeft += 300 * (dones.length - 1);
   };
 
   useEffect(() => {
-    setScroll();
-  }, [todos]);
+    setWorkingsScroll();
+  }, [workings[workings.length - 1]]);
+
+  useEffect(() => {
+    setDonesScroll();
+  }, [dones[dones.length - 1]]);
 
   useEffect(() => {
     dispatch(__getTodos(id));
@@ -100,19 +135,19 @@ function TodoList() {
       ) : (
         <>
           <h1>Working</h1>
-          <TodoListBox ref={scrollRef}>
-            {todos.filter((v) => v.isDone === false).length !== 0
-              ? todos
-                  .filter((v) => v.isDone === false)
-                  .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
+          <TodoListBox ref={workingScrollRef}>
+            {workings.length !== 0
+              ? workings.map((v) => (
+                  <Item key={v.id} todo={v} isToday={isToday()} />
+                ))
               : "추가된 할일이 없습니다."}
           </TodoListBox>
           <h1>Done</h1>
-          <TodoListBox>
-            {todos.filter((v) => v.isDone === true).length !== 0
-              ? todos
-                  .filter((v) => v.isDone === true)
-                  .map((v) => <Item key={v.id} todo={v} isToday={isToday()} />)
+          <TodoListBox ref={doneScrollRef}>
+            {dones.length !== 0
+              ? dones.map((v) => (
+                  <Item key={v.id} todo={v} isToday={isToday()} />
+                ))
               : "완료된 일이 없습니다."}
           </TodoListBox>
           <CommentListWrapper>
