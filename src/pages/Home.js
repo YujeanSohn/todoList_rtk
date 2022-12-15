@@ -136,22 +136,6 @@ function Home() {
     }
   };
 
-  if (isLoading) {
-    return (
-        <Wrapper>
-          <Header>
-            <Logo>TODO LIST🎯</Logo>
-          </Header>
-          <ButtonSt onClick={() => addTodos(id)}>+</ButtonSt>
-          <CardListWrapper>
-          <h2 style={{
-            marginLeft: "30px"
-          }}>로딩 중....</h2>
-          </CardListWrapper>
-        </Wrapper>
-    )
-  }
-
   return (
     <Wrapper>
       <Header>
@@ -159,30 +143,35 @@ function Home() {
       </Header>
       <ButtonSt onClick={() => addTodos(id)}>+</ButtonSt>
       <CardListWrapper>
-        {allTodos.map((todos) => {
-          const today = new Date(todos.id);
-          const year = today.getFullYear();
-          const month = today.getMonth() + 1;
-          const day = today.getDate();
+        {isLoading ?
+            <h2 style={{
+              marginLeft: "30px"
+            }}>로딩 중....</h2>
+            :
+            allTodos.map((todos) => {
+              const today = new Date(todos.id);
+              const year = today.getFullYear();
+              const month = today.getMonth() + 1;
+              const day = today.getDate();
 
-          const commentcount = comments.filter(
-            (comment) => todos.id === comment.todosId
-          ).length;
+              const commentcount = comments.filter(
+                  (comment) => todos.id === comment.todosId
+              ).length;
 
-          return (
-            <CardWrapper
-              type="button"
-              onClick={() => {
-                navigate(`/todos/${todos.id}`);
-              }}
-              key={todos.id}
-            >
-              <DateSt>{year + "년" + month + "월" + day + "일"}</DateSt>
-              <Progressbar todos={todos.items} isSmallSize={true} />
-              <CommentCount>💬{commentcount}</CommentCount>
-            </CardWrapper>
-          );
-        })}
+              return (
+                  <CardWrapper
+                      type="button"
+                      onClick={() => {
+                        navigate(`/todos/${todos.id}`);
+                      }}
+                      key={todos.id}
+                  >
+                    <DateSt>{year + "년" + month + "월" + day + "일"}</DateSt>
+                    <Progressbar todos={todos.items} isSmallSize={true}/>
+                    <CommentCount>💬{commentcount}</CommentCount>
+                  </CardWrapper>
+              );
+            })}
       </CardListWrapper>
     </Wrapper>
   );
